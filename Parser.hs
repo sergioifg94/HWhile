@@ -48,7 +48,7 @@ module Parser (parseSource) where
     parseAssignment
     parseSucc
     (Id right) <- between parseOpenParenth parseCloseParenth parseId
-    return $ Pred (Variable left Nothing) (Variable right Nothing)
+    return $ Succ (Variable left Nothing) (Variable right Nothing)
 
   printVar :: Parser Node
   printVar = do
