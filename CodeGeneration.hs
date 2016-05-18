@@ -11,10 +11,10 @@ module CodeGeneration (source) where
 
   execute :: Node -> State Context String
   execute (Program nodes) = sourceBody nodes >>= \code -> return $ code ++ "halt\n"
-  execute (Initialization _ offset) = state $ \ctx -> ("pusha " ++ show offset ++ "\npushi 0\nstorei\n", ctx)
-  execute (Succ left right) = state $ \ctx -> (address left ++ value right ++ "pushi 1\naddi\nstorei\n", ctx)
-  execute (Pred left right) = state $ \ctx -> (address left ++ value right ++ "pushi 1\nsubi\nstorei\n", ctx)
-  execute (Print var) = state $ \ctx -> (value var ++ "outi\n", ctx)
+  execute (Initialization _ offset) = return ("pusha " ++ show offset ++ "\npushi 0\nstorei\n")
+  execute (Succ left right) = return (address left ++ value right ++ "pushi 1\naddi\nstorei\n")
+  execute (Pred left right) = return (address left ++ value right ++ "pushi 1\nsubi\nstorei\n")
+  execute (Print var) = return (value var ++ "outi\n")
   execute (While var body) = do
     labels <- getLabels 2
     body' <- sourceBody body

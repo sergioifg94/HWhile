@@ -7,9 +7,12 @@ module Offset(setOffset) where
 
   offset :: Node -> State CurrentOffset Node
 
-  offset (Initialization name _) = state $ \current -> (Initialization name current, current + 2)
+  offset (Initialization name _) = do
+    current <- get
+    put $ current + 2
+    return $ Initialization name current
 
-  offset (Variable name _) = state $ \current -> (Variable name Nothing, current)
+  offset (Variable name _) = return $ Variable name Nothing
 
   offset (Succ left right) = do
     left' <- offset left
